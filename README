@@ -1,3 +1,5 @@
+This project is a modification to the maven-surefire-report-plugin in order to replace URL strings in the error message of the report with HTML links.
+
 Building
 ========
 
