@@ -33,6 +33,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @version $Id: SurefireReportGenerator.java 1076592 2011-03-03 11:36:07Z ltheussl $
@@ -456,7 +458,28 @@ public class SurefireReportGenerator
                             sink.tableRow();
 
                             sinkCell( sink, "" );
-                            sinkCell( sink, (String) failure.get( "message" ) );
+                            
+                            sink.tableCell();
+                            String retrievedFailureMessage = (String) failure.get( "message" );
+                            String urlRegex = "((https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;"+Pattern.quote("[]")+"]*)";
+                            Pattern p = Pattern.compile(urlRegex);
+                            Matcher m = p.matcher(retrievedFailureMessage);
+                            
+                            boolean result = m.find();
+                            while(result) {
+                              StringBuffer withoutURLStringBuffer = new StringBuffer();
+                              m.appendReplacement(withoutURLStringBuffer, "");
+                              sink.text( withoutURLStringBuffer.toString() );
+                              sink.link( m.group(1) );
+                              sink.text( m.group(1) );
+                              sink.link_();
+                              result = m.find();
+                            }
+                            StringBuffer tailWithoutURLStringBuffer = new StringBuffer();
+                            m.appendTail(tailWithoutURLStringBuffer);
+                            sink.text( tailWithoutURLStringBuffer.toString() );
+                            sink.tableCell_();
+
                             sinkCell( sink, "" );
                             sink.tableRow_();
 
