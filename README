@@ -1,0 +1,12 @@
+Building
+========
+
+Simply run Maven ;-)
+
+    mvn install
+
+
+Install jar in the local maven repository
+=========================================
+
+    mvn install:install-file -Dfile=target/maven-surefire-report-plugin-2.10.1-SNAPSHOT.jar -DgroupId=org.apache.maven.plugins -DartifactId=maven-surefire-report-plugin -Dversion=2.10.1-SNAPSHOT -Dpackaging=maven-plugin
